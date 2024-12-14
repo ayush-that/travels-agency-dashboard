@@ -4,6 +4,15 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Settings, Grid, Users, Plane, X } from "lucide-react";
 import { Filters } from "@/types/site";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,    
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface SidebarProps {
   filters: Filters;
@@ -18,6 +27,20 @@ export function Sidebar({
   onResetFilters,
   onClose,
 }: SidebarProps) {
+  const [collapsedSections, setCollapsedSections] = useState({
+    location: false,
+    price: false,
+    duration: false,
+    services: false,
+  });
+
+  const toggleSection = (section: keyof typeof collapsedSections) => {
+    setCollapsedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
   const handleLocationChange = (location: string, checked: boolean) => {
     const newLocations = checked
       ? [...filters.locations, location]
@@ -76,10 +99,10 @@ export function Sidebar({
           )}
         </div>
 
-        {/* Rest of the sidebar content */}
+        {/* Main Content Section - with flex-1 to push bottom section down */}
         <div className="flex-1 overflow-y-auto">
           {/* Filters Section */}
-          <div className="p-6 space-y-6 flex-1">
+          <div className="p-6 space-y-6">
             <div>
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Filters</h2>
@@ -94,161 +117,246 @@ export function Sidebar({
             </div>
 
             <div className="space-y-4 pb-6 border-b">
-              <h3 className="font-medium">Location</h3>
-              <div className="space-y-2">
-                {["Dhaka", "Rangpur", "Cumilla", "Khulna"].map((location) => (
-                  <div key={location} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={location}
-                      checked={filters.locations.includes(location)}
-                      onCheckedChange={(checked) =>
-                        handleLocationChange(location, checked as boolean)
-                      }
-                    />
-                    <label
-                      htmlFor={location}
-                      className="text-sm text-muted-foreground"
-                    >
-                      {location}
-                    </label>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Location</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection("location")}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      collapsedSections.location ? "-rotate-90" : ""
+                    }`}
+                  />
+                </Button>
               </div>
+              {!collapsedSections.location && (
+                <div className="space-y-2">
+                  {["Dhaka", "Rangpur", "Cumilla", "Khulna"].map((location) => (
+                    <div key={location} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={location}
+                        checked={filters.locations.includes(location)}
+                        onCheckedChange={(checked) =>
+                          handleLocationChange(location, checked as boolean)
+                        }
+                      />
+                      <label
+                        htmlFor={location}
+                        className="text-sm text-muted-foreground"
+                      >
+                        {location}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-medium">Price</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-1">
-                    <Input
-                      type="text"
-                      value={filters.priceRange.min}
-                      onChange={(e) => {
-                        const value = Number(e.target.value.replace(/\D/g, ""));
-                        onFilterChange({
-                          ...filters,
-                          priceRange: {
-                            ...filters.priceRange,
-                            min: value,
-                          },
-                        });
-                      }}
-                      className="pl-16 h-9 text-sm border-primary/20 focus:border-primary"
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center text-muted-foreground text-sm">
-                      From: $
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Price</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection("price")}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      collapsedSections.price ? "-rotate-90" : ""
+                    }`}
+                  />
+                </Button>
+              </div>
+              {!collapsedSections.price && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex-1">
+                      <Input
+                        type="text"
+                        value={filters.priceRange.min}
+                        onChange={(e) => {
+                          const value = Number(
+                            e.target.value.replace(/\D/g, "")
+                          );
+                          onFilterChange({
+                            ...filters,
+                            priceRange: {
+                              ...filters.priceRange,
+                              min: value,
+                            },
+                          });
+                        }}
+                        className="pl-16 h-9 text-sm border-primary/20 focus:border-primary"
+                      />
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center text-muted-foreground text-sm">
+                        From: $
+                      </div>
+                    </div>
+                    <span className="text-muted-foreground">-</span>
+                    <div className="relative flex-1">
+                      <Input
+                        type="text"
+                        value={filters.priceRange.max}
+                        onChange={(e) => {
+                          const value = Number(
+                            e.target.value.replace(/\D/g, "")
+                          );
+                          onFilterChange({
+                            ...filters,
+                            priceRange: {
+                              ...filters.priceRange,
+                              max: value,
+                            },
+                          });
+                        }}
+                        className="pl-12 h-9 text-sm border-primary/20 focus:border-primary"
+                      />
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center text-muted-foreground text-sm">
+                        To: $
+                      </div>
                     </div>
                   </div>
-                  <span className="text-muted-foreground">-</span>
-                  <div className="relative flex-1">
-                    <Input
-                      type="text"
-                      value={filters.priceRange.max}
-                      onChange={(e) => {
-                        const value = Number(e.target.value.replace(/\D/g, ""));
-                        onFilterChange({
-                          ...filters,
-                          priceRange: {
-                            ...filters.priceRange,
-                            max: value,
-                          },
-                        });
-                      }}
-                      className="pl-12 h-9 text-sm border-primary/20 focus:border-primary"
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center text-muted-foreground text-sm">
-                      To: $
-                    </div>
-                  </div>
+                  <Slider
+                    value={[filters.priceRange.min, filters.priceRange.max]}
+                    min={0}
+                    max={1000}
+                    step={10}
+                    className="[&_[role=slider]]:bg-primary [&_[role=slider]]:border-primary [&_[role=slider]]:h-3 [&_[role=slider]]:w-3 [&_[role=slider]]:shadow-sm [&_.range-slider-track]:bg-primary/30"
+                    onValueChange={(value) => {
+                      onFilterChange({
+                        ...filters,
+                        priceRange: {
+                          min: value[0],
+                          max: value[1],
+                        },
+                      });
+                    }}
+                  />
                 </div>
-                <Slider
-                  value={[filters.priceRange.min, filters.priceRange.max]}
-                  min={0}
-                  max={1000}
-                  step={10}
-                  className="[&_[role=slider]]:bg-primary [&_[role=slider]]:border-primary [&_[role=slider]]:h-3 [&_[role=slider]]:w-3 [&_[role=slider]]:shadow-sm [&_.range-slider-track]:bg-primary/30"
-                  onValueChange={(value) => {
-                    onFilterChange({
-                      ...filters,
-                      priceRange: {
-                        min: value[0],
-                        max: value[1],
-                      },
-                    });
-                  }}
-                />
-              </div>
+              )}
             </div>
 
             <div className="space-y-4 pb-6 border-b">
-              <h3 className="font-medium">Durations</h3>
-              <div className="space-y-2">
-                {["1h", "2h", "3h", "4h"].map((duration) => (
-                  <div key={duration} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={duration}
-                      checked={filters.durations.includes(duration)}
-                      onCheckedChange={(checked) =>
-                        handleDurationChange(duration, checked as boolean)
-                      }
-                    />
-                    <label
-                      htmlFor={duration}
-                      className="text-sm text-muted-foreground"
-                    >
-                      {duration}
-                    </label>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Durations</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection("duration")}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      collapsedSections.duration ? "-rotate-90" : ""
+                    }`}
+                  />
+                </Button>
               </div>
+              {!collapsedSections.duration && (
+                <div className="space-y-2">
+                  {["1h", "2h", "3h", "4h"].map((duration) => (
+                    <div key={duration} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={duration}
+                        checked={filters.durations.includes(duration)}
+                        onCheckedChange={(checked) =>
+                          handleDurationChange(duration, checked as boolean)
+                        }
+                      />
+                      <label
+                        htmlFor={duration}
+                        className="text-sm text-muted-foreground"
+                      >
+                        {duration}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-4 pb-6 border-b">
-              <h3 className="font-medium">Services</h3>
-              <div className="space-y-2">
-                {["Hotels", "Rent", "Tour", "Accommodation"].map((service) => (
-                  <div key={service} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={service}
-                      checked={filters.services.includes(service)}
-                      onCheckedChange={(checked) =>
-                        handleServiceChange(service, checked as boolean)
-                      }
-                    />
-                    <label
-                      htmlFor={service}
-                      className="text-sm text-muted-foreground"
-                    >
-                      {service}
-                    </label>
-                  </div>
-                ))}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Services</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection("services")}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      collapsedSections.services ? "-rotate-90" : ""
+                    }`}
+                  />
+                </Button>
               </div>
+              {!collapsedSections.services && (
+                <div className="space-y-2">
+                  {["Hotels", "Rent", "Tour", "Accommodation"].map(
+                    (service) => (
+                      <div
+                        key={service}
+                        className="flex items-center space-x-2"
+                      >
+                        <Checkbox
+                          id={service}
+                          checked={filters.services.includes(service)}
+                          onCheckedChange={(checked) =>
+                            handleServiceChange(service, checked as boolean)
+                          }
+                        />
+                        <label
+                          htmlFor={service}
+                          className="text-sm text-muted-foreground"
+                        >
+                          {service}
+                        </label>
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Bottom Section */}
-          <div className="border-t">
-            <div className="p-4 space-y-1">
+        {/* Bottom Section - will stay at bottom */}
+        <div className="border-t bg-white">
+          <div className="p-4 space-y-1">
+            <Button
+              variant="ghost"
+              className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 relative group"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Grid className="mr-2 h-5 w-5" />
+              Integrations
+              <span className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-popover rounded shadow-sm text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                Coming Soon
+              </span>
+            </Button>
+            <div className="border-b pb-1 mb-1">
               <Button
                 variant="ghost"
-                className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-transparent"
-              >
-                <Grid className="mr-2 h-5 w-5" />
-                Integrations
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 relative group"
+                onClick={(e) => e.preventDefault()}
               >
                 <Settings className="mr-2 h-5 w-5" />
                 Settings
+                <span className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-popover rounded shadow-sm text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                  Coming Soon
+                </span>
               </Button>
-              <div className="relative">
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-transparent group"
+                  className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 group"
                 >
                   <div className="flex items-center w-full justify-between">
                     <div className="flex items-center">
@@ -271,8 +379,16 @@ export function Sidebar({
                     </svg>
                   </div>
                 </Button>
-              </div>
-            </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem>Team Settings</DropdownMenuItem>
+                <DropdownMenuItem>View Team</DropdownMenuItem>
+                <DropdownMenuItem>Add Member</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Switch Team</DropdownMenuItem>
+                <DropdownMenuItem>Create Team</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

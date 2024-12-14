@@ -23,13 +23,13 @@ export function Navbar() {
   const handleNavClick = (label: string, showComingSoon: boolean) => {
     setActiveItem(label);
     // Dispatch custom event for navigation change
-    const event = new CustomEvent('navigationChange', { detail: label });
+    const event = new CustomEvent("navigationChange", { detail: label });
     window.dispatchEvent(event);
   };
 
   const handleHelpCenterClick = () => {
     setShowHelpCenter(true);
-    const event = new CustomEvent('navigationChange', { detail: 'HelpCenter' });
+    const event = new CustomEvent("navigationChange", { detail: "HelpCenter" });
     window.dispatchEvent(event);
   };
 
@@ -38,12 +38,12 @@ export function Navbar() {
       <div className="flex h-16 items-center justify-between px-6">
         <div className="flex space-x-2">
           {navItems.map((item) => (
-            <Button 
+            <Button
               key={item.label}
               variant="ghost"
               className={`px-6 font-medium ${
-                item.label === activeItem 
-                  ? "bg-primary/10 text-primary hover:bg-primary/20" 
+                item.label === activeItem
+                  ? "bg-primary/10 text-primary hover:bg-primary/20"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
               onClick={() => handleNavClick(item.label, item.showComingSoon)}
@@ -54,8 +54,8 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="text-muted-foreground font-normal"
             onClick={handleHelpCenterClick}
           >
@@ -65,8 +65,14 @@ export function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="space-x-2">
-                <div className="h-8 w-8 rounded-full bg-primary/10"></div>
-                <span>Ayush</span>
+                <div className="flex items-center gap-2">
+                  <img
+                    src="https://pbs.twimg.com/profile_images/1778114777765781508/YHoPRDtT_400x400.jpg"
+                    alt="Ayush's profile picture"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span>Ayush</span>
+                </div>
                 <ChevronDown className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -75,7 +81,9 @@ export function Navbar() {
               <DropdownMenuItem>My Bookings</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">Logout</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { SiteDetailsDialog } from "./site-details-dialog";
+import { Site } from "@/types/site";
 
 interface SiteListProps {
-  sites: Array<{
-    title: string;
-    location: string;
-    duration: string;
-    sector: string;
-    rating: number;
-    price: number;
-    imageUrl: string;
-  }>;
+  sites: Site[];
 }
 
 export function SiteList({ sites }: SiteListProps) {
+  const [selectedSite, setSelectedSite] = useState<Site | null>(null);
+
   return (
     <div className="space-y-3">
       {sites.map((site, index) => (
@@ -35,19 +32,22 @@ export function SiteList({ sites }: SiteListProps) {
                 </div>
               </div>
               <div className="flex items-baseline whitespace-nowrap">
-                <span className="text-primary text-lg font-bold">${site.price}</span>
+                <span className="text-primary text-lg font-bold">
+                  ${site.price}
+                </span>
                 <span className="text-muted-foreground text-sm">/person</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <span className="text-yellow-400 text-sm">★</span>
                 <span className="text-sm">{site.rating}</span>
               </div>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 className="text-primary p-0 h-auto text-sm font-normal hover:no-underline"
+                onClick={() => setSelectedSite(site)}
               >
                 View Details
               </Button>
@@ -55,6 +55,12 @@ export function SiteList({ sites }: SiteListProps) {
           </div>
         </div>
       ))}
+
+      <SiteDetailsDialog
+        site={selectedSite}
+        isOpen={!!selectedSite}
+        onClose={() => setSelectedSite(null)}
+      />
     </div>
   );
 }

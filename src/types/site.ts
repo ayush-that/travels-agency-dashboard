@@ -6,6 +6,12 @@ export interface Site {
   rating: number;
   price: number;
   imageUrl: string;
+  description?: string;
+  features?: string[];
+  startTime?: string;
+  maxGroupSize?: number;
+  included?: string[];
+  reviews?: number;
 }
 
 export interface Filters {

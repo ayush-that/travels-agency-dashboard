@@ -32,7 +32,6 @@ export function SiteTable({ sites }: SiteTableProps) {
               <TableHead className="whitespace-nowrap">Duration</TableHead>
               <TableHead className="whitespace-nowrap">Rating</TableHead>
               <TableHead className="whitespace-nowrap">Price</TableHead>
-              <TableHead className="whitespace-nowrap">Points</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -52,13 +51,6 @@ export function SiteTable({ sites }: SiteTableProps) {
                 <TableCell className="whitespace-nowrap">
                   <span className="font-semibold">${site.price}</span>
                   <span className="text-sm text-muted-foreground">/person</span>
-                </TableCell>
-                <TableCell className="whitespace-nowrap">
-                  {site.morePoints && (
-                    <span className="text-primary">
-                      {site.morePoints}+ points
-                    </span>
-                  )}
                 </TableCell>
               </TableRow>
             ))}

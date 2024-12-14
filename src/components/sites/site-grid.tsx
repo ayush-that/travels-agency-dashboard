@@ -221,9 +221,14 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
           </DropdownMenu>
 
           <FilterDialog filters={filters} onFilterChange={onFilterChange} />
+          
+          <div className="h-6 w-px bg-border" />
+          
           <SearchDialog onSearch={handleSearch} />
         </div>
       </div>
+
+      <div className="border-b" />
 
       {selectedSection !== "Location" ? (
         <div className="flex items-center justify-center h-[calc(100vh-12rem)]">
@@ -235,7 +240,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
       ) : (
         <>
           {view === "kanban" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredSites.map((site, index) => (
                 <SiteCard key={index} {...site} />
               ))}
