@@ -160,7 +160,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <h2 className="text-xl font-semibold">Sites</h2>
+          <h2 className="text-2xl font-semibold">Sites</h2>
           <div className="flex items-center gap-2">
             <Button
               variant={view === "list" ? "default" : "outline"}
