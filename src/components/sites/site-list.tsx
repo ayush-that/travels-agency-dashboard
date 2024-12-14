@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 interface SiteListProps {
   sites: Array<{
@@ -15,38 +14,43 @@ interface SiteListProps {
 
 export function SiteList({ sites }: SiteListProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {sites.map((site, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 p-4 rounded-xl border bg-card hover:shadow-lg transition-all duration-200"
+          className="p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
         >
-          <div className="relative w-48 h-32">
-            <Image
-              src={site.imageUrl}
-              alt={site.title}
-              fill
-              className="object-cover rounded-lg"
-            />
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold mb-2">{site.title}</h3>
-            <div className="flex items-center text-sm text-muted-foreground mb-2">
-              <span>
-                {site.location} • {site.duration} • {site.sector}
-              </span>
+          <div className="space-y-2">
+            <div className="flex justify-between items-start gap-4">
+              <div>
+                <h3 className="font-bold text-base sm:text-lg leading-tight">
+                  {site.title}
+                </h3>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                  <span>{site.location}</span>
+                  <span>•</span>
+                  <span>{site.duration}</span>
+                  <span>•</span>
+                  <span>{site.sector}</span>
+                </div>
+              </div>
+              <div className="flex items-baseline whitespace-nowrap">
+                <span className="text-primary text-lg font-bold">${site.price}</span>
+                <span className="text-muted-foreground text-sm">/person</span>
+              </div>
             </div>
-            <div className="flex items-center mb-2">
-              {"★★★★☆".split("").map((star, i) => (
-                <span key={i} className="text-yellow-400">
-                  {star}
-                </span>
-              ))}
-              <span className="ml-2">{site.rating}</span>
-            </div>
-            <div className="text-lg font-semibold text-primary">
-              ${site.price}{" "}
-              <span className="text-sm text-muted-foreground">/person</span>
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <span className="text-yellow-400 text-sm">★</span>
+                <span className="text-sm">{site.rating}</span>
+              </div>
+              <Button 
+                variant="link" 
+                className="text-primary p-0 h-auto text-sm font-normal hover:no-underline"
+              >
+                View Details
+              </Button>
             </div>
           </div>
         </div>

@@ -36,7 +36,7 @@ export function Navbar() {
   return (
     <nav className="border-b">
       <div className="flex h-16 items-center justify-between px-6">
-        <div className="flex space-x-4">
+        <div className="flex space-x-2">
           {navItems.map((item) => (
             <Button 
               key={item.label}
