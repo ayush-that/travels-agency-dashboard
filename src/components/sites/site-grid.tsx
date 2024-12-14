@@ -164,7 +164,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
           <div className="flex items-center gap-2">
             <Button
               variant={view === "list" ? "default" : "outline"}
-              size="sm"
+              size="default"
               onClick={() => setView("list")}
               className="flex items-center gap-2"
             >
@@ -173,7 +173,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
             </Button>
             <Button
               variant={view === "kanban" ? "default" : "outline"}
-              size="sm"
+              size="default"
               onClick={() => setView("kanban")}
               className="flex items-center gap-2"
             >
@@ -182,7 +182,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
             </Button>
             <Button
               variant={view === "table" ? "default" : "outline"}
-              size="sm"
+              size="default"
               onClick={() => setView("table")}
               className="flex items-center gap-2"
             >
@@ -197,7 +197,7 @@ export function SiteGrid({ filters, onFilterChange }: SiteGridProps) {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                size="sm"
+                size="default"
                 className="flex items-center gap-2"
               >
                 <ArrowUpDown className="h-4 w-4" />

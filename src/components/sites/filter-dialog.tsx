@@ -28,7 +28,7 @@ export function FilterDialog({ filters, onFilterChange }: FilterDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
+        <Button variant="default" size="default" className="flex items-center gap-2">
           <Filter className="h-4 w-4" />
           Filter
         </Button>

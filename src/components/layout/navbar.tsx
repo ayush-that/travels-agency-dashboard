@@ -22,7 +22,6 @@ export function Navbar() {
 
   const handleNavClick = (label: string, showComingSoon: boolean) => {
     setActiveItem(label);
-    // Dispatch custom event for navigation change
     const event = new CustomEvent("navigationChange", { detail: label });
     window.dispatchEvent(event);
   };
@@ -44,7 +43,7 @@ export function Navbar() {
               className={`px-6 font-medium ${
                 item.label === activeItem
                   ? "bg-primary/10 text-primary hover:bg-primary/20"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  : "border border-muted-foreground/20 text-muted-foreground hover:bg-background"
               }`}
               onClick={() => handleNavClick(item.label, item.showComingSoon)}
             >

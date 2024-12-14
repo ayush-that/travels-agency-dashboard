@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,    
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
@@ -89,7 +89,7 @@ export function Sidebar({
       <div className="flex flex-col h-full">
         {/* Logo Section */}
         <div className="h-16 px-4 flex items-center justify-between border-b">
-          <div className="bg-primary p-2 rounded-md">
+          <div className="bg-primary p-2 rounded-full">
             <Plane className="w-6 h-6 text-white" />
           </div>
           {onClose && (

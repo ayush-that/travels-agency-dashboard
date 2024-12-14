@@ -22,7 +22,11 @@ export function SearchDialog({ onSearch }: SearchDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default" size="sm" className="flex items-center gap-2">
+        <Button
+          variant="default"
+          size="default"
+          className="flex items-center gap-2 bg-[#E831D7] hover:bg-[#d12bc1] text-white"
+        >
           <Search className="h-4 w-4" />
           Find Menu
         </Button>
