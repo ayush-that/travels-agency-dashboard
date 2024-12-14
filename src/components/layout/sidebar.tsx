@@ -85,7 +85,7 @@ export function Sidebar({
   };
 
   return (
-    <aside className="w-full lg:w-72 h-full bg-white border-r">
+    <aside className="w-full lg:w-72 h-full bg-[#f9f9f9] border-r">
       <div className="flex flex-col h-full">
         {/* Logo Section */}
         <div className="h-16 px-4 flex items-center justify-between border-b">
@@ -145,7 +145,7 @@ export function Sidebar({
                       />
                       <label
                         htmlFor={location}
-                        className="text-sm text-muted-foreground"
+                        className="text-sm text-muted-foreground data-[state=checked]:font-medium peer-data-[state=checked]:font-medium"
                       >
                         {location}
                       </label>
