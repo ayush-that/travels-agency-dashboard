@@ -15,7 +15,8 @@ export function SiteList({ sites }: SiteListProps) {
       {sites.map((site, index) => (
         <div
           key={index}
-          className="p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
+          className="p-4 rounded-lg border bg-card transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:cursor-pointer hover:bg-primary/5"
+          onClick={() => setSelectedSite(site)}
         >
           <div className="space-y-2">
             <div className="flex justify-between items-start gap-4">
