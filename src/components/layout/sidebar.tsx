@@ -2,7 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Settings, Grid, Users, Plane, X } from "lucide-react";
+import {
+  Settings,
+  Grid,
+  Users,
+  Plane,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Filters } from "@/types/site";
 import {
   DropdownMenu,
@@ -19,6 +27,8 @@ interface SidebarProps {
   onFilterChange: (filters: Filters) => void;
   onResetFilters: () => void;
   onClose?: () => void;
+  isCollapsed?: boolean;
+  onCollapse?: (collapsed: boolean) => void;
 }
 
 export function Sidebar({
@@ -26,6 +36,8 @@ export function Sidebar({
   onFilterChange,
   onResetFilters,
   onClose,
+  isCollapsed = false,
+  onCollapse,
 }: SidebarProps) {
   const [collapsedSections, setCollapsedSections] = useState({
     location: false,
@@ -84,23 +96,49 @@ export function Sidebar({
     });
   };
 
+  const handleCollapse = () => {
+    if (onCollapse) {
+      onCollapse(!isCollapsed);
+    }
+  };
+
   return (
-    <aside className="w-full lg:w-72 h-full bg-[#f9f9f9] border-r">
+    <aside
+      className={`relative h-full bg-[#f9f9f9] border-r transition-all duration-300 ${
+        isCollapsed ? "w-16" : "w-full lg:w-72"
+      }`}
+    >
       <div className="flex flex-col h-full">
         {/* Logo Section */}
         <div className="h-16 px-4 flex items-center justify-between border-b">
           <div className="bg-primary p-2 rounded-full">
             <Plane className="w-6 h-6 text-white" />
           </div>
-          {onClose && (
+          {!isCollapsed && onClose && (
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           )}
         </div>
 
-        {/* Main Content Section - with flex-1 to push bottom section down */}
-        <div className="flex-1 overflow-y-auto">
+        {/* Collapse Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleCollapse}
+          className="absolute -right-3 top-20 h-6 w-6 rounded-full border bg-background p-0 shadow-md"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </Button>
+
+        {/* Main Content Section */}
+        <div
+          className={`flex-1 overflow-y-auto ${isCollapsed ? "hidden" : ""}`}
+        >
           {/* Filters Section */}
           <div className="p-6 space-y-6">
             <div>
@@ -326,70 +364,93 @@ export function Sidebar({
         </div>
 
         {/* Bottom Section - will stay at bottom */}
-        <div className="border-t bg-white">
-          <div className="p-4 space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 relative group"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Grid className="mr-2 h-5 w-5" />
-              Integrations
-              <span className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-popover rounded shadow-sm text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                Coming Soon
-              </span>
-            </Button>
-            <div className="border-b pb-1 mb-1">
+        <div className={`border-t bg-white ${isCollapsed ? "p-2" : ""}`}>
+          {isCollapsed ? (
+            <div className="space-y-4">
+              <Button
+                variant="ghost"
+                className="w-full p-2 flex justify-center"
+              >
+                <Grid className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full p-2 flex justify-center"
+              >
+                <Settings className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full p-2 flex justify-center"
+              >
+                <Users className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : (
+            <div className="p-4 space-y-1">
               <Button
                 variant="ghost"
                 className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 relative group"
                 onClick={(e) => e.preventDefault()}
               >
-                <Settings className="mr-2 h-5 w-5" />
-                Settings
+                <Grid className="mr-2 h-5 w-5" />
+                Integrations
                 <span className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-popover rounded shadow-sm text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                   Coming Soon
                 </span>
               </Button>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <div className="border-b pb-1 mb-1">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 group"
+                  className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 relative group"
+                  onClick={(e) => e.preventDefault()}
                 >
-                  <div className="flex items-center w-full justify-between">
-                    <div className="flex items-center">
-                      <Users className="mr-2 h-5 w-5" />
-                      Travel Team's
-                    </div>
-                    <svg
-                      className="h-4 w-4 transition-transform group-hover:text-foreground"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m6 9 6 6 6-6"
-                      />
-                    </svg>
-                  </div>
+                  <Settings className="mr-2 h-5 w-5" />
+                  Settings
+                  <span className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-popover rounded shadow-sm text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                    Coming Soon
+                  </span>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>Team Settings</DropdownMenuItem>
-                <DropdownMenuItem>View Team</DropdownMenuItem>
-                <DropdownMenuItem>Add Member</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Switch Team</DropdownMenuItem>
-                <DropdownMenuItem>Create Team</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start h-10 px-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 group"
+                  >
+                    <div className="flex items-center w-full justify-between">
+                      <div className="flex items-center">
+                        <Users className="mr-2 h-5 w-5" />
+                        Travel Team's
+                      </div>
+                      <svg
+                        className="h-4 w-4 transition-transform group-hover:text-foreground"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m6 9 6 6 6-6"
+                        />
+                      </svg>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem>Team Settings</DropdownMenuItem>
+                  <DropdownMenuItem>View Team</DropdownMenuItem>
+                  <DropdownMenuItem>Add Member</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Switch Team</DropdownMenuItem>
+                  <DropdownMenuItem>Create Team</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       </div>
     </aside>

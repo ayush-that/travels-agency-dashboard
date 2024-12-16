@@ -22,16 +22,19 @@ const DEFAULT_FILTERS: Filters = {
 export default function Home() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Desktop Sidebar */}
-        <div className="hidden lg:block lg:w-72 lg:flex-shrink-0">
+        <div className={`hidden lg:block transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72'}`}>
           <Sidebar
             filters={filters}
             onFilterChange={setFilters}
             onResetFilters={() => setFilters(DEFAULT_FILTERS)}
+            isCollapsed={isSidebarCollapsed}
+            onCollapse={setIsSidebarCollapsed}
           />
         </div>
 
